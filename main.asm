@@ -22,6 +22,7 @@
             slli t2, s2, 2 # t2 = j*4
             add t2, t2, s0 # get arr[j] adress
             lw t3, 0(t2) # get arr[j] value
+            lw t1, 0(t0) #get arr[i] value
         
             blt t3, t1, change
             L1:
@@ -37,8 +38,8 @@
     done: j L2
 
     change:
-        mv t4, t3 # save t3 old value
+        mv a2, t3 # save t3 old value
         mv t3, t1
-        mv t1, t4
+        mv t1, a2
         j L1
     L2:    
