@@ -45,9 +45,9 @@ return:
 	addi t1, t0, 4
 	blt t0, s8, cycle
     
-    li a0, 4
-    la a1, arr
-    ecall
+    #li a0, 4
+    #la a1, arr
+    #ecall
     
     
     jal ra, exit
