@@ -14,6 +14,9 @@ change:
     mv t6, t5
     mv t5, a2
     j return
+exit:
+	li a0, 10
+    ecall
 
 __start:
 	lw s9, _i_max
@@ -41,7 +44,16 @@ return:
 	addi t4, t3, 4
 	addi t1, t0, 4
 	blt t0, s8, cycle
-
+    
+    #li a0, 4
+    #la a1, arr
+    #ecall
+    
+    
     jal ra, exit
 
-exit:
+
+
+
+
+
