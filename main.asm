@@ -1,3 +1,6 @@
+# Задание: 20. В памяти размещается массив, необходимо произвести его сортировку, при этом выкинув все нечетные числа;
+# Входные данные записываются в строку ниже, в s4 нужно записать количество элементов
+# Выходные данные лежать в Memory, адрес начала массива s0 = 0x10000000
 .data
     arr: .word 1, 4, 5, 8, 11, 3, 1, 4, 2, 7 # source data
 .text
@@ -5,8 +8,8 @@
     la s0, arr
     li s1, 0 # i
     li s2, 0 # j
-    li s4, 10 # len-1 of array
-    # li s5, 3 # len for j 
+    li s4, 10 # len of array
+    # s5 len for j 
     
     loop:
         bge s1, s4, endloop
@@ -29,26 +32,25 @@
 
                 sw t4, 0(t3)
 
-                addi s2, s2, 1
+                addi s2, s2, 1 # j += 1
                 j interloop
             endinterloop:
             sw zero, 4(t3) # last element of arr = 0
             addi s4, s4, -1 # len -= 1
-            addi s1, s1, -1
+            addi s1, s1, -1 # i -= 1, it is required after shifting
         L0:
 
-        addi s1, s1, 1
+        addi s1, s1, 1 # i += 1
         j loop
     endloop:
     
-    # t0 =  adress arr[j+1]
+    # t0 = adress arr[j+1]
     # t1 = arr[j+1]
     # t2 = adress arr[j]
     # t3 = arr[j] 
 
-    add s5, s4, zero
-    add s1, zero, zero
-    add s2, zero, zero
+    add s1, zero, zero # i = 0
+    add s2, zero, zero # j = 0
 
     for:
         bge s1, s4, done
@@ -59,12 +61,12 @@
             slli t2, s2, 2 # t2 = j*4
             add t2, t2, s0 # get arr[j] adress
 
-            addi t0, t2, 4 # t0 = *arr[j+1]
+            addi t0, t2, 4 # t0 = get arr[j+1] adress
 
             lw t3, 0(t2) # get arr[j] value
-            lw t1, 0(t0) #get arr[j+1] value
+            lw t1, 0(t0) # get arr[j+1] value
         
-            bge t3, t1, L1 # if t3 < t1 change
+            bge t3, t1, L1 # if t3 < t1 => change
             mv a2, t3 # save t3 old value
             mv t3, t1
             mv t1, a2
