@@ -1,11 +1,11 @@
 .data
-    arr: .word 4, 5, 8, 11, 3, 1, 4, 2, 7 # source data
+    arr: .word 1, 4, 5, 8, 11, 3, 1, 4, 2, 7 # source data
 .text
     # s0 = base adress
     la s0, arr
     li s1, 0 # i
     li s2, 0 # j
-    li s4, 9 # len-1 of array
+    li s4, 10 # len-1 of array
     # li s5, 3 # len for j 
     
     loop:
