@@ -1,16 +1,55 @@
 .data
-    arr: .word 3, 1, 4, 2 # source data
+    arr: .word 4, 5, 8, 11, 3, 1, 4, 2, 7 # source data
 .text
-    # s0 = base adress, s1 - i, s2 - j
+    # s0 = base adress
     la s0, arr
-    li s1, 0
-    li s2, 0
-    li s4, 3 # len of array
-    li s5, 3 # for j
-    # t0 = *arr[j+1]
+    li s1, 0 # i
+    li s2, 0 # j
+    li s4, 9 # len-1 of array
+    # li s5, 3 # len for j 
+    
+    loop:
+        bge s1, s4, endloop
+        slli t0, s1, 2 # t0 = i*4
+        add t0, t0, s0 # get arr[i] adress
+
+        lw t1, 0(t0) #get arr[i] value
+
+        srli t2, t1, 1 # t2 = arr[i] // 2
+        slli t2, t2, 1 # t2 = t2 * 2
+
+        beq t2, t1, L0 # if t2 != arr[i] shift array
+            add s2, zero, s1 # j = i
+            interloop:
+                bge s2, s4, endinterloop
+                slli t3, s2, 2 # t3 = j*4
+                add t3, t3, s0 # get arr[j] adress
+
+                lw t4, 4(t3) # get arr[j+1] value
+
+                sw t4, 0(t3)
+
+                addi s2, s2, 1
+                j interloop
+            endinterloop:
+            sw zero, 4(t3) # last element of arr = 0
+            addi s4, s4, -1 # len -= 1
+            addi s1, s1, -1
+        L0:
+
+        addi s1, s1, 1
+        j loop
+    endloop:
+    
+    # t0 =  adress arr[j+1]
     # t1 = arr[j+1]
-    # t2 = *arr[j]
-    # t3 = arr[j]  
+    # t2 = adress arr[j]
+    # t3 = arr[j] 
+
+    add s5, s4, zero
+    add s1, zero, zero
+    add s2, zero, zero
+
     for:
         bge s1, s4, done
         for_inter:
@@ -25,7 +64,7 @@
             lw t3, 0(t2) # get arr[j] value
             lw t1, 0(t0) #get arr[j+1] value
         
-            bge t3, t1, L1 # if t3 >= t1 change
+            bge t3, t1, L1 # if t3 < t1 change
             mv a2, t3 # save t3 old value
             mv t3, t1
             mv t1, a2
